@@ -1,13 +1,13 @@
-import { updateProduct } from "./../controller/updateProductController";
+import { updateProduct } from "../controller/products/updateProductController";
 import {
   removeProduct,
   removeManyProducts
-} from "./../controller/removeProduct";
-import { postProduct } from "./../controller/postProductController";
+} from "../controller/products/removeProductController";
+import { postProduct } from "../controller/products/postProductController";
 import {
   getAllProducts,
   getSpecificProduct
-} from "./../controller/getProductsController";
+} from "../controller/products/getProductsController";
 import { Router } from "express";
 
 const router = Router();
@@ -27,7 +27,7 @@ router.delete("/:id", removeProduct);
 // Remove Many Products
 router.delete("/", removeManyProducts);
 
-// TODO: Update Prodcuts
+// Update Prodcuts
 router.patch("/:id", updateProduct);
 
 export default router;

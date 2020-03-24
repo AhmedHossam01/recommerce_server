@@ -6,6 +6,7 @@ import db_init from "./db_init";
 import cors from "cors";
 import productsRouter from "./api/productsRouter";
 import throwErr, { handleErr } from "./util/errHandler";
+import ordersRouter from "./api/ordersRouetr";
 
 // ANCHOR: Initializations
 const port = process.env.PORT || 5050;
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 
 // ANCHOR: API Links
 app.use("/products", productsRouter);
+app.use("/orders", ordersRouter);
 
 // ANCHOR: Error Handling
 app.all("*", (req, res, next) => {

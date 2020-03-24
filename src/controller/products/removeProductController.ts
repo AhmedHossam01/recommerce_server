@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import Product from "../model/product";
-import throwErr from "../util/errHandler";
+import Product from "../../model/product";
+import throwErr from "../../util/errHandler";
 
 export const removeProduct = (
   req: Request,
