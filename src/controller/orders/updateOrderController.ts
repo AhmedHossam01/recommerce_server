@@ -12,7 +12,7 @@ export const updateOrder = (
   const { method, value } = req.query;
   const id = req.params.id;
 
-  if (method === "inc") {
+  if (method === "inc" || !value) {
     if (value <= 0) {
       return throwErr(412, "Value cannot be equal or less than 0", next);
     }
@@ -65,8 +65,8 @@ export const updateOrder = (
   } else if (method === "dec") {
     // dec ordered stock and inc product
     // if value 0 or negative
-    if (value >= 0) {
-      return throwErr(412, "You can specify 0 or negative value", next);
+    if (value <= 0 || !value) {
+      return throwErr(412, "You cannot specify 0 or negative value", next);
     }
     // if value is bigger than orderedStock
     Order.findById(id)
@@ -75,7 +75,7 @@ export const updateOrder = (
         if (value >= document.orderedStock) {
           return throwErr(
             412,
-            `Decrement value is bigger that ordered stock: ${document.orderedStock}`,
+            `Decrement value is bigger than ordered stock: ${document.orderedStock}`,
             next
           );
         }
@@ -89,7 +89,7 @@ export const updateOrder = (
         )
           .then(() => {
             Order.updateOne(
-              { id: id },
+              { _id: id },
               {
                 $inc: {
                   orderedStock: -value
@@ -105,6 +105,6 @@ export const updateOrder = (
       })
       .catch(err => throwErr(500, err.message, next));
   } else {
-    // error you should specify method
+    throwErr(412, "You should specify method of 'inc' or 'dec'", next);
   }
 };
