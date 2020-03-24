@@ -4,6 +4,8 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import db_init from "./db_init";
 import cors from "cors";
+import productsRouter from "./api/productsRouter";
+import throwErr, { handleErr } from "./util/errHandler";
 
 // ANCHOR: Initializations
 const port = process.env.PORT || 5050;
@@ -18,16 +20,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // ANCHOR: API Links
+app.use("/products", productsRouter);
 
 // ANCHOR: Error Handling
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.log(err);
-  res.status(500).send({
-    error: err
-  });
+app.all("*", (req, res, next) => {
+  throwErr(404, "Route not found", next);
 });
 
-/**
- * TODO: test error handling manually
- * TODO: setup automatd tests with jest
- */
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  handleErr(err, res);
+});
