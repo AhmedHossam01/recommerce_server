@@ -8,7 +8,7 @@ export const updateOrder = (
   res: Response,
   next: NextFunction
 ) => {
-  // orders/5454615/?method=inc&value=5
+  // orders/di65623y5hj22g596/?method=inc&value=5
   const { method, value } = req.query;
   const id = req.params.id;
 

@@ -1,0 +1,1 @@
+- Update the updateOrder method to make it accept a single value instead of inc and dec. Those 		will be handled on the Front-End for better validation.
