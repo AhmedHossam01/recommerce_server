@@ -23,7 +23,7 @@ export const loginController = (
         .compare(password, result.password)
         .then(success => {
           if (!success) {
-            throwErr(401, "Username or password is incorrect", next);
+            return throwErr(401, "Username or password is incorrect", next);
           }
 
           const token = jwt.sign(
