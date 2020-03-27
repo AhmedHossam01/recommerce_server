@@ -4,14 +4,18 @@ import User from "../../model/user";
 import bcrypt from "bcrypt";
 import validator from "email-validator";
 
-export const signupController = (
+export const signupController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { username, email, password } = req.body;
 
-  const userExists = User.findOne({
+  if (!username || !email || !password) {
+    return throwErr(412, "Please fill all required fields", next);
+  }
+
+  const userExists = await User.findOne({
     $or: [{ username }, { email }]
   });
 
@@ -24,7 +28,7 @@ export const signupController = (
   }
 
   if (password.length < 3 || password.length > 15) {
-    throwErr(
+    return throwErr(
       412,
       "Your password cannot be less than 3 or bigger than 15 chars",
       next
@@ -32,7 +36,7 @@ export const signupController = (
   }
 
   if (username.length < 3 || username.length > 15) {
-    throwErr(
+    return throwErr(
       412,
       "Your username cannot be less than 3 or bigger than 15 chars",
       next
@@ -40,21 +44,29 @@ export const signupController = (
   }
 
   if (!validator.validate(email)) {
-    throwErr(412, "Please enter a valid email", next);
+    return throwErr(412, "Please enter a valid email", next);
   }
 
   bcrypt
     .hash(password, 10)
     .then(hash => {
       const user = new User({
-        name,
+        username,
         email,
         password: hash
       });
       user
         .save()
-        .then(result => {
-          res.json(result);
+        .then((result: any) => {
+          res.json({
+            request: "Create user",
+            status: "success",
+            createdUser: {
+              username: result.username,
+              email: result.email,
+              _id: result._id
+            }
+          });
         })
         .catch(err => {
           throwErr(500, err.message, next);

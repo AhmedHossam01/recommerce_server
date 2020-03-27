@@ -7,6 +7,7 @@ import cors from "cors";
 import productsRouter from "./api/productsRouter";
 import throwErr, { handleErr } from "./util/errHandler";
 import ordersRouter from "./api/ordersRouetr";
+import userRouter from "./api/userRouter";
 
 // ANCHOR: Initializations
 const port = process.env.PORT || 5050;
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 // ANCHOR: API Links
 app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
+app.use("/user", userRouter);
 
 // ANCHOR: Error Handling
 app.all("*", (req, res, next) => {

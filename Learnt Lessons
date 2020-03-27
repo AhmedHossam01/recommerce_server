@@ -11,8 +11,13 @@ use res.header('key', value).send('something') to set a header for the response
 ==============================================================
 
 For validating information, like signup page, my choice is to make put it in a middleware so the payload will not reach my controller unluss it pass the validation. Which is better for performance. And is earlier than the "DB Schema".
-Also, from now on I'll use @hapi/joi because it's a huge time safer.
 
 ==============================================================
 
 Mongoose Schema Types can take a validate(v) => v function
+
+==============================================================
+
+Tools to use in the next episode:
+- express-validator
+- mongoose-autopopulate

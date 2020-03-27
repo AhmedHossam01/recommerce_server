@@ -1,7 +1,0 @@
-{
-  "env": {
-    "PORT": 4000,
-    "DB_NAME": "recommerce",
-    "DB_HOST": "localhost:27017"
-  }
-}

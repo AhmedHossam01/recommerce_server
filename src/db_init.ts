@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+require("dotenv").config();
 
 const { DB_HOST, DB_NAME } = process.env;
 
