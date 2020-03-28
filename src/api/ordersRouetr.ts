@@ -11,7 +11,7 @@ import { Router } from "express";
 const router = Router();
 
 // post order and decease product stock
-router.post("/", postOrder);
+router.post("/", auth(), postOrder);
 
 // Update order with increment or specified value in query
 router.patch("/:id", updateOrder);

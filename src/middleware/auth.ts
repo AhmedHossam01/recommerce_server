@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import throwErr from "../util/errHandler";
 import User from "../model/user";
 
-export const auth = (roles?: string[]) => (
+export const auth = (roles?: string[]) => async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -14,6 +14,14 @@ export const auth = (roles?: string[]) => (
 
     // @ts-ignore
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+    const userRecord = await User.findById(decoded._id);
+    // @ts-ignore
+    req.currentUser = userRecord;
+
+    if (!userRecord) {
+      return throwErr(404, "User not found", next);
+    }
 
     if (roles && roles.includes(decoded.role)) {
       next();
@@ -27,29 +35,10 @@ export const auth = (roles?: string[]) => (
       return throwErr(401, "Unauthorized", next);
     }
 
-    /** I was able to do it like this
+    /** I can also do it like this (just as refference)
      * If (user.role >= givenRole) pass
-     * انا فاجر اوي يعني
      */
   } catch (err) {
     throwErr(401, "Auth Failed", next);
-  }
-};
-
-export const getCurrentUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const token: any = req.headers.token;
-  const userRecord = await User.findById(token.id);
-
-  // @ts-ignore
-  req.currentUser = userRecord;
-
-  if (!userRecord) {
-    return throwErr(401, "User not found", next);
-  } else {
-    return next();
   }
 };

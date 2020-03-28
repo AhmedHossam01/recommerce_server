@@ -8,7 +8,9 @@ export const postOrder = (req: Request, res: Response, next: NextFunction) => {
 
   const order = new Order({
     product,
-    orderedStock
+    orderedStock,
+    // @ts-ignore
+    user: req.currentUser._id
   });
 
   Product.findById(product)
@@ -27,31 +29,44 @@ export const postOrder = (req: Request, res: Response, next: NextFunction) => {
         return throwErr(412, "You cannot order 0 or negative number", next);
       }
 
-      order
-        .save()
-        .then(result => {
-          Product.updateOne(
-            { _id: product },
-            {
-              $inc: {
-                stock: -orderedStock
-              }
-            }
-          )
-            .exec()
-            .then(() => {
-              res.json({
-                request: "Create new order",
-                status: "success",
-                order: result
+      // @ts-ignore
+      Order.findOne({ user: req.currentUser._id, product })
+        .exec()
+        .then(orderFound => {
+          if (orderFound) {
+            return throwErr(
+              412,
+              "Order of this product already exist. Please update your order instead",
+              next
+            );
+          } else {
+            order
+              .save()
+              .then(result => {
+                Product.updateOne(
+                  { _id: product },
+                  {
+                    $inc: {
+                      stock: -orderedStock
+                    }
+                  }
+                )
+                  .exec()
+                  .then(() => {
+                    res.json({
+                      request: "Create new order",
+                      status: "success",
+                      order: result
+                    });
+                  })
+                  .catch(err => {
+                    return throwErr(500, err.message, next);
+                  });
+              })
+              .catch(err => {
+                throwErr(500, err._message, next);
               });
-            })
-            .catch(err => {
-              return throwErr(500, err.message, next);
-            });
-        })
-        .catch(err => {
-          throwErr(500, err._message, next);
+          }
         });
     })
     .catch(err => {
