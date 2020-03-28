@@ -1,3 +1,4 @@
+- write a middleware for getting current user
 - Add role based authorization
 - Add user (author) for orders and protect them
 - Add get user's orderes
