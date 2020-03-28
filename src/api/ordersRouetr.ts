@@ -1,4 +1,8 @@
-import { getOrderes } from "./../controller/orders/getOrdersController";
+import { auth } from "./../middleware/auth";
+import {
+  getOrderes,
+  getSpecificOrder
+} from "./../controller/orders/getOrdersController";
 import { removeOrder } from "./../controller/orders/removeOrderController";
 import { updateOrder } from "./../controller/orders/updateOrderController";
 import { postOrder } from "./../controller/orders/postOrderController";
@@ -16,6 +20,9 @@ router.patch("/:id", updateOrder);
 router.delete("/:id", removeOrder);
 
 // get orderes
-router.get("/", getOrderes);
+router.get("/", auth(["admin", "user"]), getOrderes);
+
+// get specific order
+router.get("/:id", getSpecificOrder);
 
 export default router;

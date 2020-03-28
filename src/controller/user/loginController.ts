@@ -14,13 +14,13 @@ export const loginController = (
 
   User.findOne({ username })
     .exec()
-    .then((result: any) => {
-      if (!result) {
+    .then((user: any) => {
+      if (!user) {
         return throwErr(401, "Username or password is incorrect", next);
       }
 
       bcrypt
-        .compare(password, result.password)
+        .compare(password, user.password)
         .then(success => {
           if (!success) {
             return throwErr(401, "Username or password is incorrect", next);
@@ -28,10 +28,12 @@ export const loginController = (
 
           const token = jwt.sign(
             {
-              _id: result._id,
-              email: result.email
+              _id: user._id,
+              email: user.email,
+              role: user.role
             },
-            "process.env.SECRET_KEY",
+            // @ts-ignore
+            process.env.SECRET_KEY,
             {
               expiresIn: "1h"
             }

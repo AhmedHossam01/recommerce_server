@@ -1,1 +1,8 @@
-- Update the updateOrder method to make it accept a single value instead of inc and dec. Those 		will be handled on the Front-End for better validation.
+- Add role based authorization
+- Add user (author) for orders and protect them
+- Add get user's orderes
+- Add array of orders for each product (protected for admins)
+- Get users and specific user and populate them with orders
+- protect routes check
+
+- Add categories CRUD
