@@ -2,15 +2,17 @@ import { Request, Response, NextFunction } from "express";
 import Order from "../../model/order";
 import throwErr from "../../util/errHandler";
 import Product from "../../model/product";
+import User from "../../model/user";
 
 export const postOrder = (req: Request, res: Response, next: NextFunction) => {
   const { product, orderedStock } = req.body;
+  // @ts-ignore
+  const userId = req.currentUser._id;
 
   const order = new Order({
     product,
     orderedStock,
-    // @ts-ignore
-    user: req.currentUser._id
+    user: userId
   });
 
   Product.findById(product)
@@ -58,6 +60,16 @@ export const postOrder = (req: Request, res: Response, next: NextFunction) => {
                       status: "success",
                       order: result
                     });
+                  })
+                  .then(() => {
+                    User.updateOne(
+                      { _id: userId },
+                      {
+                        $push: {
+                          orderes: result._id
+                        }
+                      }
+                    ).exec();
                   })
                   .catch(err => {
                     return throwErr(500, err.message, next);

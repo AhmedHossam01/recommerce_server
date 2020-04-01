@@ -21,3 +21,13 @@ Mongoose Schema Types can take a validate(v) => v function
 Tools to use in the next episode:
 - express-validator
 - mongoose-autopopulate
+
+==============================================================
+
+.then()
+.then()
+.catch()
+
+to handle multiple promises
+
+==============================================================

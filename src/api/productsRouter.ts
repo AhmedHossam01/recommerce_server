@@ -1,3 +1,4 @@
+import { auth } from "./../middleware/auth";
 import { updateProduct } from "../controller/products/updateProductController";
 import {
   removeProduct,
@@ -19,15 +20,15 @@ router.get("/", getAllProducts);
 router.get("/:id", getSpecificProduct);
 
 // POST Products
-router.post("/", postProduct);
+router.post("/", auth(["admin"]), postProduct);
 
 // Remove Product
-router.delete("/:id", removeProduct);
+router.delete("/:id", auth(["admin"]), removeProduct);
 
 // Remove Many Products
-router.delete("/", removeManyProducts);
+router.delete("/", auth(["admin"]), removeManyProducts);
 
 // Update Prodcuts
-router.patch("/:id", updateProduct);
+router.patch("/:id", auth(["admin"]), updateProduct);
 
 export default router;

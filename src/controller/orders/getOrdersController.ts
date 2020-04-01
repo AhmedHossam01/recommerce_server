@@ -19,8 +19,13 @@ export const getSpecificOrder = (
 ) => {
   Order.findById(req.params.id)
     .populate("product")
+    .populate("user", "_id")
     .exec()
     .then(result => {
+      // @ts-ignore
+      if (result.user._id.toString() !== req.currentUser._id.toString()) {
+        return throwErr(401, "Unauthorized", next);
+      }
       res.json(result);
     })
     .catch(err => throwErr(500, err.message, next));

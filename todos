@@ -1,9 +1,9 @@
-- Add get user's orderes
-- Add array of orders for each product (protected for admins)
-- Get users and specific user and populate them with orders
-- protect routes check
 - Add description to products
 - Add upload image for product
 - Add rating for product
+- populate the rseult coming from .save()
+- validate username
+- from the frontend, automatically send login request after signup
+- make sure to hide the password when getting any user data
 
 - Add categories CRUD

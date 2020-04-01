@@ -12,8 +12,13 @@ export const removeOrder = (
 
   Order.findById(id)
     .populate("product")
+    .populate("user", "_id")
     .exec()
     .then((result: any) => {
+      // @ts-ignore
+      if (result.user._id.toString() !== req.currentUser._id.toString()) {
+        return throwErr(401, "Unauthorized", next);
+      }
       Product.updateOne(
         { _id: result.product._id },
         {

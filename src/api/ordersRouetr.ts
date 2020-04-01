@@ -14,15 +14,15 @@ const router = Router();
 router.post("/", auth(), postOrder);
 
 // Update order with increment or specified value in query
-router.patch("/:id", updateOrder);
+router.patch("/:id", auth(), updateOrder);
 
 // remove order and increase product stock
-router.delete("/:id", removeOrder);
+router.delete("/:id", auth(), removeOrder);
 
 // get orderes
-router.get("/", auth(["admin", "user"]), getOrderes);
+router.get("/", getOrderes);
 
 // get specific order
-router.get("/:id", getSpecificOrder);
+router.get("/:id", auth(), getSpecificOrder);
 
 export default router;
