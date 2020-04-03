@@ -1,5 +1,3 @@
-- Add description to products
-- Add upload image for product
 - Add rating for product
 - populate the rseult coming from .save()
 - validate username

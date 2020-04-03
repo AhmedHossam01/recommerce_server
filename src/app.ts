@@ -17,6 +17,7 @@ app.listen(port, () => console.log("SERVER OK"));
 
 // ANCHOR: Public Middlewares
 app.use(morgan("dev"));
+app.use("/uploads", express.static("uploads"));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

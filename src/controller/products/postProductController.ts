@@ -8,12 +8,14 @@ export const postProduct = (
   next: NextFunction
 ) => {
   const { name, price, stock, description } = req.body;
+  const image = req.file.path;
 
   const product = new Product({
     name,
     price,
     stock,
-    description
+    description,
+    image
   });
 
   if (!name) {

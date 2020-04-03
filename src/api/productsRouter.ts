@@ -10,6 +10,34 @@ import {
   getSpecificProduct
 } from "../controller/products/getProductsController";
 import { Router } from "express";
+import multer from "multer";
+import throwErr from "../util/errHandler";
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function(req, file, cb) {
+    cb(null, new Date().toISOString() + "_" + file.originalname);
+  }
+});
+
+// @ts-ignore
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter
+});
 
 const router = Router();
 
@@ -20,7 +48,7 @@ router.get("/", getAllProducts);
 router.get("/:id", getSpecificProduct);
 
 // POST Products
-router.post("/", auth(["admin"]), postProduct);
+router.post("/", auth(["admin"]), upload.single("image"), postProduct);
 
 // Remove Product
 router.delete("/:id", auth(["admin"]), removeProduct);
